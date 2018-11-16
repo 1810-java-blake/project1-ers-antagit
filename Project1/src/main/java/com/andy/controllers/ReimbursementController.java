@@ -50,24 +50,25 @@ public class ReimbursementController {
 		String context = "Project1";
 		uri = uri.substring(context.length() + 2, uri.length());
 		String[] uriArray = uri.split("/");
-		if (uri.equals("employee/reimbursement")) {
-			List<Reimbursement> reimb = ReimbServ.findByUsername(req.getSession().getAttribute("username").toString());
-			ResponseMapper.convertAndAttach(reimb, resp);
-			return;
-		} else if (uriArray.length == 2) {
-			try {
-				
-				int id = Integer.parseInt(uriArray[1]);
-//				log.info("retreiving user with id: " + id);
-				List<Reimbursement> reimb = ReimbServ.findAllByEmployeeId(id);
+		try {
+			if (uri.equals("employee/reimbursement")) {
+				List<Reimbursement> reimb = ReimbServ.findByUsername(req.getSession().getAttribute("username").toString());
 				ResponseMapper.convertAndAttach(reimb, resp);
 				return;
-			} catch (NumberFormatException e) {
-				resp.setStatus(400);
+			}
+			else if(uri.equals("manager/reimbursement")) {
+				List<Reimbursement> reimb = ReimbServ.findAll();
+				ResponseMapper.convertAndAttach(reimb, resp);
 				return;
 			}
-		} else {
-			resp.setStatus(404);
+			else {
+				resp.setStatus(404);
+			}
+			
+		}
+		catch (NumberFormatException e) {
+			resp.setStatus(400);
+			return;
 		}
 	}
 

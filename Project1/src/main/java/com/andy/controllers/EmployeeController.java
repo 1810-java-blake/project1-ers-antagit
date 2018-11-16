@@ -56,10 +56,8 @@ public class EmployeeController {
 				resp.setStatus(403);
 				return;
 			}
-			else {
-				//Employee emp = employeeService.findByUserName((String)req.getSession().getAttribute("username"));
-				Employee emp = employeeService.findByUserName("asianboi");
-				System.out.println(emp.getFirstName());
+			else if(employeeService.login(cred, req.getSession())){
+				Employee emp = employeeService.findByUserName((String)req.getSession().getAttribute("username"));
 				Map<String, String> tMap = new HashMap<>();
 				tMap.put("role", emp.getRole());
 				ResponseMapper.convertAndAttach(tMap, resp);

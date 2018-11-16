@@ -34,7 +34,6 @@ public class EmployeeServiceImpl implements IEmployeeService {
 		
 		//employee was found within the database
 		if (employee != null) {
-			System.out.println("logged in");
 			session.setAttribute("role", employee.getRole());		
 			session.setAttribute("username", employee.getUsername());
 			return true;

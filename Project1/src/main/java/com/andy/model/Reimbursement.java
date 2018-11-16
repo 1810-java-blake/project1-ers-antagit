@@ -3,6 +3,8 @@ package com.andy.model;
 import java.sql.Date;
 public class Reimbursement {
 	 private int id;
+	 private String firstName;
+	 private String lastName;
 	 private double amount;
 	 private Date submitted;
 	 private Date resolved;
@@ -15,7 +17,29 @@ public class Reimbursement {
 	 private int statusId;
 	 private int typeId;
 	 
-	 //for saving a new reimbursement
+
+
+	public Reimbursement() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Reimbursement(int id, String firstName, String lastName, double amount, Date submitted, Date resolved,
+			String description, String receipt, String status, String type) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.amount = amount;
+		this.submitted = submitted;
+		this.resolved = resolved;
+		this.description = description;
+		this.receipt = receipt;
+		this.status = status;
+		this.type = type;
+	}
+
+	//for saving a new reimbursement
 		public Reimbursement(double amount, Date submitted, Date resolved, String description, String receipt,
 			int author, int resolverId, int statusId, int typeId) {
 		super();
@@ -111,10 +135,6 @@ public class Reimbursement {
 				+ ", description=" + description + ", receipt=" + receipt + ", status=" + status + ", type=" + type
 				+ "]";
 	}
-	public Reimbursement() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 	public int getId() {
 		return id;
 	}
@@ -195,6 +215,29 @@ public class Reimbursement {
 
 	public void setTypeId(int typeId) {
 		this.typeId = typeId;
+	}
+	 public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public int getAuthorId() {
+		return authorId;
+	}
+
+	public void setAuthorId(int authorId) {
+		this.authorId = authorId;
 	}
 
 }

@@ -52,7 +52,7 @@ submit = (e) =>{
   .then(res =>{
       //if the response was sent forward to home
       if(res.status === 200){
-          this.props.history.push('/home');
+          this.props.history.push('/employee-home');
       }
   })
 }

@@ -32,14 +32,10 @@ public class DispatcherServlet extends HttpServlet {
 		}
 		else if(!req.getMethod().equals("OPTIONS")) {
 			try {
-				if(req.getSession().getAttribute("role").equals("Employee")) {
-					if(uri.startsWith("employee/reimbursement")){
+				if(!req.getSession().getAttribute("role").equals("null")) {
 						reimbControl.process(req, resp);
-					}
-					if(uri.startsWith("employee/submit_reimbursement")){
-						reimbControl.process(req, resp);
-					}
 				}
+
 			}
 			catch(NullPointerException e) {
 				e.printStackTrace();

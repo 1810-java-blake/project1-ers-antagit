@@ -37,12 +37,16 @@ export class LoginComponent extends React.Component {
           },
           credentials: 'include'
         })
-        .then(res =>(res.json()))
+        .then(res =>(res.json())).catch(reason => {console.log('invalid cradentails')})
         .then(res =>{
-          console.log(res);
+          if(res.role === 'Employee'){
             //if the response was sent forward to home
-                this.props.history.push('/home');
-          })
+                this.props.history.push('/employee-home');
+            }
+          else if(res.role ==='Manager'){
+              this.props.history.push('/manager-home');
+            }
+          }).catch(reason => {})
     }
   render() {
     return (

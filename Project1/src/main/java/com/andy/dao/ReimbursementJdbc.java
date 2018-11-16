@@ -118,17 +118,19 @@ public class ReimbursementJdbc implements IReimbursementDao {
 			
 			//setting up query string
 			 String query = "SELECT reimb_id as reimbId,\r\n" + 
-			 		"reimb_amount as amount,\r\n" + 
-			 		"reimb_submitted as submitted,\r\n" + 
-			 		"reimb_resolved as resolved,\r\n" + 
-			 		"reimb_description as description,\r\n" + 
-			 		"reimb_receipt as receipt,\r\n" + 
-			 		"reimb_status as status,\r\n" + 
-			 		"reimb_type as type \r\n" + 
-			 		"FROM ERS_REIMBURSEMENT\r\n" + 
-			 		"INNER JOIN ERS_REIMBURSEMENT_STATUS ON ers_reimbursement.reimb_status_id = ERS_REIMBURSEMENT_STATUS.reimb_status_id\r\n" + 
-			 		"INNER JOIN ERS_REIMBURSEMENT_TYPE ON ers_reimbursement.reimb_type_id = ERS_REIMBURSEMENT_TYPE.reimb_type_id\r\n" + 
-			 		"INNER JOIN ERS_USERS ON ers_reimbursement.reimb_author = ERS_USERS.ers_users_id";
+			 		"	user_first_name as firstname,\r\n" + 
+			 		"	user_last_name as lastname,\r\n" + 
+			 		"	reimb_amount as amount,\r\n" + 
+			 		"	reimb_submitted as submitted,\r\n" + 
+			 		"	reimb_resolved as resolved,\r\n" + 
+			 		"	reimb_description as description,\r\n" + 
+			 		"	reimb_receipt as receipt,\r\n" + 
+			 		"	reimb_status as status,\r\n" + 
+			 		"	reimb_type as type \r\n" + 
+			 		"	FROM ERS_REIMBURSEMENT\r\n" + 
+			 		"	INNER JOIN ERS_REIMBURSEMENT_STATUS ON ers_reimbursement.reimb_status_id = ERS_REIMBURSEMENT_STATUS.reimb_status_id\r\n" + 
+			 		"	INNER JOIN ERS_REIMBURSEMENT_TYPE ON ers_reimbursement.reimb_type_id = ERS_REIMBURSEMENT_TYPE.reimb_type_id\r\n" + 
+			 		"	INNER JOIN ERS_USERS ON ers_reimbursement.reimb_author = ERS_USERS.ers_users_id WHERE user_role_id = 2";
 			 
 				PreparedStatement statment = conn.prepareStatement(query);
 				ResultSet resultSet = statment.executeQuery();
@@ -136,6 +138,8 @@ public class ReimbursementJdbc implements IReimbursementDao {
 					while(resultSet.next()) {
 						reimbList.add(new Reimbursement (
 								resultSet.getInt("reimbId"),
+								resultSet.getString("firstname"),
+								resultSet.getString("lastname"),
 								resultSet.getDouble("amount"),
 								resultSet.getDate("submitted"),
 								resultSet.getDate("resolved"),
