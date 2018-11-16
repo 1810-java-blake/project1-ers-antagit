@@ -14,7 +14,6 @@ import com.andy.util.ConnectionUtil;
 public class EmployeeJdbc implements IEmployeeDao {
 	
 	//Could refactor this and remove it but lazy
-	Employee employee;
 	@Override
 	public Employee findById(int id) {
 		try(Connection conn = ConnectionUtil.getConnection()) {
@@ -31,7 +30,7 @@ public class EmployeeJdbc implements IEmployeeDao {
 			statment.setInt(1, id);
 			ResultSet resultSet = statment.executeQuery();
 			while(resultSet.next()){
-				employee = new Employee(
+				return new Employee(
 					resultSet.getInt("id"),
 					resultSet.getString("username"),
 					resultSet.getString("password"),
@@ -43,7 +42,6 @@ public class EmployeeJdbc implements IEmployeeDao {
 			}
 			
 			
-			return employee;
 		} 
 		catch (SQLException sqle) {
 			System.out.println(sqle);
@@ -67,8 +65,16 @@ public class EmployeeJdbc implements IEmployeeDao {
 			PreparedStatement statment = conn.prepareStatement(query);
 			statment.setString(1, username);
 			ResultSet resultSet =  statment.executeQuery();
-			while(resultSet.next()) {
-				employee = new Employee(
+			
+			if(resultSet.next()) { 
+				System.out.println(
+						resultSet.getString("username") +
+						resultSet.getString("password") +
+						resultSet.getString("firstname") +
+						resultSet.getString("lastname") +
+						resultSet.getString("email") +
+						resultSet.getString("role"));
+				return new Employee(
 						resultSet.getInt("id"),
 						resultSet.getString("username"),
 						resultSet.getString("password"),
@@ -78,8 +84,7 @@ public class EmployeeJdbc implements IEmployeeDao {
 						resultSet.getString("role")
 						);
 				}
-			
-				return employee;
+
 			
 		} catch (SQLException sqle) {
 			System.out.println(sqle);
@@ -104,7 +109,7 @@ public class EmployeeJdbc implements IEmployeeDao {
 			statment.setString(1, password);
 			ResultSet resultSet =  statment.executeQuery();
 			while(resultSet.next()) {
-				employee = new Employee(
+				return new Employee(
 						resultSet.getInt("id"),
 						resultSet.getString("username"),
 						resultSet.getString("password"),
@@ -115,7 +120,6 @@ public class EmployeeJdbc implements IEmployeeDao {
 						);
 				}
 			
-				return employee;
 			
 		} catch (SQLException sqle) {
 			System.out.println(sqle);

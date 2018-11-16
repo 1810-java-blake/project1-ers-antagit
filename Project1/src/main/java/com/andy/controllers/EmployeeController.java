@@ -1,22 +1,21 @@
 package com.andy.controllers;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.andy.dto.Credential;
-//import com.revature.dto.Credential;
 import com.andy.model.Employee;
 import com.andy.services.IEmployeeService;
 import com.andy.util.ResponseMapper;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class EmployeeController {
 	private Logger log = Logger.getRootLogger();
@@ -51,11 +50,21 @@ public class EmployeeController {
 		 if ("login".equals(uri)) {
 			 //reading in the values of the request that is of credentail objects and creating credential class with read in value IE username and password
 			Credential cred = om.readValue(req.getReader(), Credential.class);
-			
 			// login will return false if user input wrong credentials or employee was not found in database
 			if(!employeeService.login(cred, req.getSession())) {
 				//return forbidden status code
 				resp.setStatus(403);
+				return;
+			}
+			else {
+				//Employee emp = employeeService.findByUserName((String)req.getSession().getAttribute("username"));
+				Employee emp = employeeService.findByUserName("asianboi");
+				System.out.println(emp.getFirstName());
+				Map<String, String> tMap = new HashMap<>();
+				tMap.put("role", emp.getRole());
+				ResponseMapper.convertAndAttach(tMap, resp);
+				
+				return;
 			}
 		} else {
 			//return if page was not found

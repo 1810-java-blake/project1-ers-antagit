@@ -45,7 +45,7 @@ submit = (e) =>{
     method: 'POST',
     body: JSON.stringify(reimb),
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/json'
     },
     credentials: 'include'
   })

@@ -76,13 +76,18 @@ public class ReimbursementController {
 		String uri = req.getRequestURI();
 		String context = "Project1";
 		uri = uri.substring(context.length() + 2, uri.length());
-		String[] uriArray = uri.split("/");
+		
+		if(uri.equals("employee/submit_reimbursement")) {
 		Reimbursement newReimb = om.readValue(req.getReader(), Reimbursement.class);
-		System.out.println(newReimb.getTypeId());
 		reimbService.saveReimbursement(req,newReimb);
 		resp.setStatus(200);
 		return;
 		//need to finish cradentails first
+		}
+		else {
+			resp.setStatus(404);
+			return;
+		}
 	}
 
 }

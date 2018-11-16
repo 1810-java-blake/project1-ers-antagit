@@ -24,33 +24,27 @@ public class DispatcherServlet extends HttpServlet {
 		resp.addHeader("Access-Control-Allow-Credentials", "true");
 		resp.setContentType("application/json");
 		
-		
 		String uri = req.getRequestURI();
 		String context = "Project1";
 		uri = uri.substring(context.length() + 2, uri.length());
 		if (uri.startsWith("login")) {
-			
 			employcontrol.process(req, resp);
 		}
-		try {
-//			System.out.println(req.getSession().getAttribute("role"));
-//			resp.setStatus(404);
-			if(req.getSession().getAttribute("role").equals("Employee")) {
-				if(uri.startsWith("employee/reimbursement")){
-				reimbControl.process(req, resp);
-				}
-				if(uri.startsWith("employee/submit_reimbursement")){
-					reimbControl.process(req, resp);
+		else if(!req.getMethod().equals("OPTIONS")) {
+			try {
+				if(req.getSession().getAttribute("role").equals("Employee")) {
+					if(uri.startsWith("employee/reimbursement")){
+						reimbControl.process(req, resp);
+					}
+					if(uri.startsWith("employee/submit_reimbursement")){
+						reimbControl.process(req, resp);
+					}
 				}
 			}
-
-		
+			catch(NullPointerException e) {
+				e.printStackTrace();
+				resp.setStatus(404);
+			}
 		}
-		catch(NullPointerException e) {
-			e.printStackTrace();
-			resp.setStatus(404);
-		}
-		}
-	
-
+	}
 }

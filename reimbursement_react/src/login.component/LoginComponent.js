@@ -33,16 +33,16 @@ export class LoginComponent extends React.Component {
           method: 'POST',
           body: JSON.stringify(cred),
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/json'
           },
           credentials: 'include'
         })
+        .then(res =>(res.json()))
         .then(res =>{
+          console.log(res);
             //if the response was sent forward to home
-            if(res.status === 200){
                 this.props.history.push('/home');
-            }
-        })
+          })
     }
   render() {
     return (

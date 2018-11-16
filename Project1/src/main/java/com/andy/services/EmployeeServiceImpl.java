@@ -11,20 +11,20 @@ public class EmployeeServiceImpl implements IEmployeeService {
 	IEmployeeDao employeeDao = IEmployeeDao.currentImplamentation;
 	@Override
 	public Employee findById(int id) {
-		employeeDao.findById(id);
-		return null;
+		Employee employee = employeeDao.findById(id);
+		return employee;
 	}
 
 	@Override
 	public Employee findByUserName(String username) {
-		employeeDao.findByUserName(username);
-		return null;
+		Employee employee = employeeDao.findByUserName(username);
+		return employee;
 	}
 
 	@Override
 	public Employee findByPassword(String password) {
-		employeeDao.findByPassword(password);
-		return null;
+		Employee employee = employeeDao.findByPassword(password);
+		return employee;
 	}
 
 	@Override
@@ -34,6 +34,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
 		
 		//employee was found within the database
 		if (employee != null) {
+			System.out.println("logged in");
 			session.setAttribute("role", employee.getRole());		
 			session.setAttribute("username", employee.getUsername());
 			return true;
