@@ -205,10 +205,11 @@ public class ReimbursementJdbc implements IReimbursementDao {
 	public List<Reimbursement> reject(int reimbId) {
 		try(Connection conn = ConnectionUtil.getConnection()) {
 			String query = "update ers_reimbursement\r\n" + 
-					"set reimb_status_id = 3\r\n" + 
+					"set reimb_status_id = 3 , reimb_resolved = ?\r\n" + 
 					"where reimb_id = ?";
 			PreparedStatement statment = conn.prepareStatement(query);
-			statment.setInt(1, reimbId);
+			statment.setDate(1, Date.valueOf(LocalDate.now().toString()));
+			statment.setInt(2, reimbId);
 			 
 			statment.executeUpdate();
 		} catch (SQLException e) {
@@ -223,10 +224,11 @@ public class ReimbursementJdbc implements IReimbursementDao {
 	public List<Reimbursement> accept(int reimbId) {
 		try(Connection conn = ConnectionUtil.getConnection()) {
 			String query = "update ers_reimbursement\r\n" + 
-					"set reimb_status_id = 2\r\n" + 
+					"set reimb_status_id = 2, reimb_resolved = ?\r\n" + 
 					"where reimb_id = ?";
 			PreparedStatement statment = conn.prepareStatement(query);
-			statment.setInt(1, reimbId);
+			statment.setDate(1, Date.valueOf(LocalDate.now().toString()));
+			statment.setInt(2, reimbId);
 			 
 			statment.executeUpdate();
 		} catch (SQLException e) {

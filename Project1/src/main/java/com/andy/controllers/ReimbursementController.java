@@ -52,7 +52,9 @@ public class ReimbursementController {
 		uri = uri.substring(context.length() + 2, uri.length());
 		String[] uriArray = uri.split("/");
 		try {
+			System.out.println(uri);
 			if (uri.equals("employee/reimbursement")) {
+				
 				List<Reimbursement> reimb = ReimbServ.findByUsername(req.getSession().getAttribute("username").toString());
 				ResponseMapper.convertAndAttach(reimb, resp);
 				return;

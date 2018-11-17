@@ -1,14 +1,18 @@
 import React from 'react';
-import { Button } from 'reactstrap';
+import { Button, Form, FormGroup,Label} from 'reactstrap';
+
+
 export class ManagerHomeComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            reimbursements: []
+            reimbursements: [],
+            sort: "None"
         }
     }
 
 componentDidMount() {
+    console.log(this.state.sort)
     fetch('http://localhost:8088/Project1/manager/reimbursement', {
         credentials: 'include'
     })
@@ -56,12 +60,48 @@ acceptReimb = (e) =>{
     })
 })
 }
+sortByChange = (e) =>{
+    this.setState({
+        ...this.state,
+        sort : e.target.value
+    })
+    
+}
+    renderList = () => {
+        let sort = this.state.sort;
+        if(sort === "None")
+            return this.state.reimbursements;
+        else if(sort === "Pending") {
+            return this.state.reimbursements.filter((index) =>index.status ==="Pending");
+            // Filter
+        }
+        else if(sort === "Approved") {
+            return this.state.reimbursements.filter((index) =>index.status ==="Approved");
+        }
+        else if(sort === "Denied") {
+            return this.state.reimbursements.filter((index) =>index.status ==="Denied");
+        }
+    }
 
   render() {
+    let renderList = this.renderList();
+    
     return (
         <>
       <div>
           <h1>Current Reimbursements</h1>
+          <Form>
+          <FormGroup>
+            <Label for="exampleSelect">Sort By</Label>
+            <select value = {this.state.sort} onChange = {this.sortByChange}>
+                <option>None</option>
+                <option>Pending</option>
+                <option>Approved</option>
+                <option>Denied</option>
+                {/* {name} */}
+            </select>
+        </FormGroup>
+          </Form>
           <table className="table table-hover">
               <thead>
                 <tr>
@@ -82,7 +122,7 @@ acceptReimb = (e) =>{
               </thead>
               <tbody>
                       {
-                      this.state.reimbursements.map( item =>    
+                      renderList.map( item =>    
                         <tr key = {item.id}>
                         <td>{item.id}</td>
                         <td>{item.firstName}</td>

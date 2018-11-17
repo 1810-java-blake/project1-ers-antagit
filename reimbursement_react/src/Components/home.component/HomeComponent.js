@@ -8,7 +8,7 @@ export class HomeComponent extends React.Component {
         }
     }
 
-    componentWDidMount() {
+    componentDidMount() {
         fetch('http://localhost:8088/Project1/employee/reimbursement', {
           credentials: 'include'
         })

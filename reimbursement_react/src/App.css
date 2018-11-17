@@ -17,8 +17,23 @@
 .App-link {
   color: #61dafb;
 }
+#sortBy{
+  width: 40%;
+}
 
-
+.col-3{
+  margin: 0 auto;
+  text-align: center;
+  position:absolute;
+  top:30%;
+  right:0%;
+  left:0;
+  height: 30%;
+  
+}
+#loginBtn{
+  margin-top:10px ;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

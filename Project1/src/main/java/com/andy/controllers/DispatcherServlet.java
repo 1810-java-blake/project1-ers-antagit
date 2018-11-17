@@ -33,6 +33,7 @@ public class DispatcherServlet extends HttpServlet {
 		else if(!req.getMethod().equals("OPTIONS")) {
 			try {
 				if(!req.getSession().getAttribute("role").equals("null")) {
+
 						reimbControl.process(req, resp);
 				}
 

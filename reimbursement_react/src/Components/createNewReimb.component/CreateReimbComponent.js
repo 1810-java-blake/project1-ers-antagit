@@ -8,9 +8,7 @@ export class CreateReimbComponent extends React.Component {
       amount: '',
       description: '',
       receipt: '',
-      typeId: 1
-    }
-    this.date = {
+      typeId: 1,
       dateSubmitted :new Date().toLocaleDateString()
     }
   }
@@ -39,7 +37,12 @@ typeChange = (select) =>{
 }
 submit = (e) =>{
   e.preventDefault()
-  let reimb = this.state
+  let reimb = {
+    amount: this.state.amount,
+      description: this.state.description,
+      receipt: this.state.receipt,
+      typeId: this.state.typeId
+  }
   // making a request with this url
   fetch("http://localhost:8088/Project1/employee/submit_reimbursement",{
     method: 'POST',
@@ -66,7 +69,7 @@ submit = (e) =>{
             <input name ="amount" placeholder ="Enter amount" type ="text" value ={this.state.amount} onChange = {this.amountChange} required />
 
             <label htmlFor ="date">Date</label>
-            <input name ="date"type ="text" value ={this.date.dateSubmitted} readOnly className="form-control-plaintext" id="staticEmail"/>
+            <input name ="date"type ="text" value ={this.state.dateSubmitted} readOnly className="form-control-plaintext" id="staticEmail"/>
 
             <label htmlFor ="description">Description</label>
             <input name ="description"type ="text" value ={this.state.description} onChange = {this.descriptionChange} />

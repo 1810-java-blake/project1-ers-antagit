@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from 'reactstrap';
-import { Alert } from 'reactstrap';
+import { Button, Alert,Form,FormGroup, Input,Label} from 'reactstrap';
+
 export class LoginComponent extends React.Component {
   
     constructor(props) {
@@ -10,6 +10,7 @@ export class LoginComponent extends React.Component {
         this.state = {
           username: '',
           password: '',
+          alert : false
         }
       }
     
@@ -32,9 +33,26 @@ export class LoginComponent extends React.Component {
         
       }
    
+      invalidCred = (callback) =>{
+        this.setState ({
+          ...this.state,
+          alert: true
+        })
+        setTimeout(this.removeAlert, 10000)
+        
+      }
+      removeAlert = () =>{
+        this.setState({
+          ...this.state,
+          alert : false
+        })
+      }
     submit = (e) =>{
         e.preventDefault()
-        let cred = this.state
+        let cred = {
+          username : this.state.username,
+          password : this.state.password
+        }
         // making a request with this url
         fetch("http://localhost:8088/Project1/login",{
           method: 'POST',
@@ -44,7 +62,10 @@ export class LoginComponent extends React.Component {
           },
           credentials: 'include'
         })
-        .then(res =>(res.json()))
+
+        .then(res =>(res.json())).catch(reason => { 
+          this.invalidCred()
+        })
         .then(res =>{
           if(res.role === 'Employee'){
             //if the response was sent forward to home
@@ -53,45 +74,48 @@ export class LoginComponent extends React.Component {
           else if(res.role ==='Manager'){
               this.props.history.push('/manager-home');
             }
-          }).catch(reason => {})
+          }).catch(reason => {
+
+          })
     }
 
   render() {
     
     return (
       <>
-      {this.action && <Alert color="primary">
-        This is a primary alert — check it out!
+      {
+        this.state.alert && <Alert color="danger" isOpen={this.state.alert} toggle={this.removeAlert}>
+        Invalid username or passowrd. Please try again.
       </Alert>  
       }
-        <form className='' onSubmit={this.submit}>
-        <h1 >Login Boi</h1>
-        
+      {/* {console.log(this.state.alert)} */}
+        <Form id='loginForm' className= "col-3 border border-primary" onSubmit={this.submit}>
+          <FormGroup id = "loginFormGroup">
+            <h1 >Login Boi</h1>
+            {/* username input and label will update state.username if input changes */}
+            <Label htmlFor="input-username">Username</Label>
+            <Input type="text"
+              id="input-username"
+              placeholder="Username"
+              required
+              value={this.state.username}
+              onChange={this.usernameChange}
+            />
 
+            <Label htmlFor="inputPassword">Password</Label>
+            <Input type="password"
+              id="inputPassword"
+              placeholder="Password"
+              required
+              value={this.state.password}
+              onChange={this.passwordChange} />
+            <Button type="submit" color = 'primary' id ='loginBtn'>
+              Sign in
+            </Button>
 
-        {/* username input and label will update state.username if input changes */}
-        <label htmlFor="input-username">Username</label>
-        <input type="text"
-          id="input-username"
-          placeholder="Username"
-          required
-          value={this.state.username}
-          onChange={this.usernameChange}
-        />
-
-        <label htmlFor="inputPassword">Password</label>
-        <input type="password"
-          id="inputPassword"
-          placeholder="Password"
-          required
-          value={this.state.password}
-          onChange={this.passwordChange} />
-
-        <Button
-          type="submit" color = 'danger'>
-          Sign in
-        </Button>
-      </form>
+        </FormGroup>
+      </Form>
+      
       </>
     )
   }
