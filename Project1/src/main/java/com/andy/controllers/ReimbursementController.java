@@ -18,6 +18,7 @@ import com.andy.util.ResponseMapper;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 
 
 
@@ -85,6 +86,18 @@ public class ReimbursementController {
 		return;
 		//need to finish cradentails first
 		}
+		else if(uri.equals("manager/reject_reimbursement")){
+			//read in the value and call rej
+			List<Reimbursement> riemb  = reimbService.reject(om.readValue(req.getReader(), Integer.class));
+			ResponseMapper.convertAndAttach(riemb, resp);
+
+		}
+		else if(uri.equals("manager/accept_reimbursement")) {
+			//read in the value and call rej
+			List<Reimbursement> riemb =reimbService.accept(om.readValue(req.getReader(), Integer.class));
+			ResponseMapper.convertAndAttach(riemb, resp);
+		}
+		
 		else {
 			resp.setStatus(404);
 			return;

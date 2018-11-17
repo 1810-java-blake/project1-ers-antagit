@@ -30,4 +30,21 @@ public class ReimbursementServiceImpl implements IReimbursementService{
 		return reimbDao.findByUsername(username);
 	}
 
+	@Override
+	public List<Reimbursement> reject(int reimbId) {
+		 return reimbDao.reject(reimbId);
+		
+	}
+
+	@Override
+	public List<Reimbursement> accept(int reimbId) {
+		return reimbDao.accept(reimbId);
+		
+	}
+
+	@Override
+	public List<Reimbursement> findById(int reimbId) {
+		return reimbDao.accept(reimbId);
+	}
+
 }

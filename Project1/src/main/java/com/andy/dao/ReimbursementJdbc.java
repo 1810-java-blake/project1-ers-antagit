@@ -16,11 +16,12 @@ import java.sql.ResultSet;
 
 import com.andy.model.Employee;
 import com.andy.model.Reimbursement;
+import com.andy.services.IReimbursementService;
 import com.andy.util.ConnectionUtil;
 
 
 public class ReimbursementJdbc implements IReimbursementDao {
-
+	IReimbursementService reimbService = IReimbursementService.currentImplamentation;
 	//retirning all of the reimb with given where ers_users = id
 	@Override
 	public List<Reimbursement> findAllByEmployeeId(int id) {
@@ -96,7 +97,6 @@ public class ReimbursementJdbc implements IReimbursementDao {
 			statment.setInt(6, employee.getId());//done
 			statment.setInt(7, 2); //done
 			statment.setInt(8, 1);// done
-//			System.out.println("this is your yupe fam:     "+reimb.getTypeId());
 			statment.setInt(9, reimb.getTypeId()); //done
 			
 			statment.executeUpdate();
@@ -109,7 +109,6 @@ public class ReimbursementJdbc implements IReimbursementDao {
 
 	@Override
 	public List<Reimbursement> findAll() {
-		
 		//a list that will be holding all of or reimb 
 		List<Reimbursement> reimbList = new ArrayList<>();
 		
@@ -201,5 +200,87 @@ public class ReimbursementJdbc implements IReimbursementDao {
 				}
 		return null;
 	}
+
+	@Override
+	public List<Reimbursement> reject(int reimbId) {
+		try(Connection conn = ConnectionUtil.getConnection()) {
+			String query = "update ers_reimbursement\r\n" + 
+					"set reimb_status_id = 3\r\n" + 
+					"where reimb_id = ?";
+			PreparedStatement statment = conn.prepareStatement(query);
+			statment.setInt(1, reimbId);
+			 
+			statment.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return this.findAll();
+		
+	}
+
+	@Override
+	public List<Reimbursement> accept(int reimbId) {
+		try(Connection conn = ConnectionUtil.getConnection()) {
+			String query = "update ers_reimbursement\r\n" + 
+					"set reimb_status_id = 2\r\n" + 
+					"where reimb_id = ?";
+			PreparedStatement statment = conn.prepareStatement(query);
+			statment.setInt(1, reimbId);
+			 
+			statment.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return this.findAll();	
+	}
+
+	@Override
+	public List<Reimbursement> findById(int reimbID) {
+		//a list that will be holding all of or reimb 
+				List<Reimbursement> reimbList = new ArrayList<>();
+				//setting up our connection with our diserd database
+				try(Connection conn = ConnectionUtil.getConnection()) {
+					
+					//setting up query string
+					 String query = "SELECT reimb_id as reimb_id,\r\n" + 
+					 		"reimb_amount as amount,\r\n" + 
+					 		"reimb_submitted as submitted,\r\n" + 
+					 		"reimb_resolved as resolved,\r\n" + 
+					 		"reimb_description as description,\r\n" + 
+					 		"reimb_receipt as receipt,\r\n" + 
+					 		"reimb_status as status,\r\n" + 
+					 		"reimb_type as type \r\n" + 
+					 		"FROM ERS_REIMBURSEMENT\r\n" + 
+					 		"INNER JOIN ERS_REIMBURSEMENT_STATUS ON ers_reimbursement.reimb_status_id = ERS_REIMBURSEMENT_STATUS.reimb_status_id\r\n" + 
+					 		"INNER JOIN ERS_REIMBURSEMENT_TYPE ON ers_reimbursement.reimb_type_id = ERS_REIMBURSEMENT_TYPE.reimb_type_id\r\n" + 
+					 		"INNER JOIN ERS_USERS ON ers_reimbursement.reimb_author = ERS_USERS.ers_users_id WHERE reimb_id = ?";
+					 
+						PreparedStatement statment = conn.prepareStatement(query);
+						statment.setInt(1, reimbID);
+						ResultSet resultSet = statment.executeQuery();
+							//getting the first result. REMEMBER THAT the index will be before our desired index thus we use a do while loop 
+							while(resultSet.next()) {
+								reimbList.add(new Reimbursement (
+										resultSet.getInt("reimb_id"),
+										resultSet.getDouble("amount"),
+										resultSet.getDate("submitted"),
+										resultSet.getDate("resolved"),
+										resultSet.getString("description"),
+										resultSet.getString("receipt"),
+										resultSet.getString("status"),
+										resultSet.getString("type")
+										
+										));
+							}
+							return reimbList;
+						} catch (SQLException sqle) {
+							System.out.println(sqle);
+						}
+				return null;
+			}
+	
+	
+	
 	
 }

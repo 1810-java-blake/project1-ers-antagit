@@ -15,4 +15,9 @@ public interface IReimbursementService {
 	List<Reimbursement> findByUsername(String username);
 
 	int saveReimbursement(HttpServletRequest req, Reimbursement reimb);
+	
+	List<Reimbursement> findById(int reimbId);
+	
+	List<Reimbursement> reject(int reimbId);
+	List<Reimbursement> accept(int reimbId);
 }
