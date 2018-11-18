@@ -24,7 +24,6 @@ componentDidMount() {
         });
     }
 rejectReimb = (e) =>{
-    console.log(e.target.id)
     fetch('http://localhost:8088/Project1/manager/reject_reimbursement', {
         method: 'POST',
         body: JSON.stringify(e.target.id),
@@ -81,6 +80,12 @@ sortByChange = (e) =>{
             return this.state.reimbursements.filter((index) =>index.status ==="Denied");
         }
     }
+convertDate = (date)=>{
+    let maxDate = new Date(date);
+    let dateArray = [maxDate.getMonth() +1,maxDate.getDate(),maxDate.getFullYear()];
+    let dateString = `${dateArray[0]} /${dateArray[1]}/${dateArray[2]} `
+    return dateString;
+}
 
   render() {
     let renderList = this.renderList();
@@ -121,14 +126,15 @@ sortByChange = (e) =>{
               </thead>
               <tbody>
                       {
-                      renderList.map( item =>    
+                      renderList.map( item =>
+                            
                         <tr key = {item.id}>
                         <td>{item.id}</td>
                         <td>{item.firstName}</td>
                         <td>{item.lastName}</td>
                         <td>{item.amount}</td>
-                        <td>{item.submitted}</td>
-                        <td>{item.resolved}</td>
+                        <td>{this.convertDate(item.submitted)}</td>
+                        <td>{this.convertDate(item.resolved)}</td>
                         <td>{item.description}</td>
                         <td>{item.receipt}</td>
                         <td>{item.status}</td>
